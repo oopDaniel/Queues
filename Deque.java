@@ -1,6 +1,16 @@
+/******************************************************************************
+ *  Compilation:  javac Deque.java
+ *  Execution:    java Deque
+ *  Dependencies: java.util.Iterator java.util.NoSuchElementException
+ *
+ *  A double-ended queue or deque is a generalization of a stack and a queue that
+ *  supports adding and removing items from either the front or the back of the data structure.
+ *
+ ******************************************************************************/
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import edu.princeton.cs.algs4.StdOut;
+
 
 public class Deque<Item> implements Iterable<Item> {
     private Node first, last;
@@ -11,22 +21,40 @@ public class Deque<Item> implements Iterable<Item> {
         private Node next, previous;
     }
 
-    public Deque() {                          // construct an empty deque
+    /**
+     * construct an empty deque
+     *
+     */
+    public Deque() {
         first = null;
         last = null;
         N = 0;
         assert check();
     }
 
-    public boolean isEmpty() {                // is the deque empty?
+    /**
+     * is the deque empty?
+     *
+     */
+    public boolean isEmpty() {
         return first == null || last == null;
     }
 
-    public int size() {                       // return the number of items on the deque
+    /**
+     * return the number of items on the deque
+     *
+     */
+    public int size() {
         return N;
     }
 
-    public void addFirst(Item item) {         // add the item to the front
+    /**
+     * add the item to the front
+     *
+     * @param the Item needs to be added
+     *
+     */
+    public void addFirst(Item item) {
         if (item == null) throw new java.lang.NullPointerException();
         Node oldfirst = first;
         first = new Node();
@@ -42,7 +70,13 @@ public class Deque<Item> implements Iterable<Item> {
         assert check();
     }
 
-    public void addLast(Item item) {          // add the item to the end
+    /**
+     * add the item to the end
+     *
+     * @param the Item needs to be added
+     *
+     */
+    public void addLast(Item item) {
         if (item == null) throw new java.lang.NullPointerException();
         Node oldlast = last;
         last = new Node();
@@ -58,7 +92,11 @@ public class Deque<Item> implements Iterable<Item> {
         assert check();
     }
 
-    public Item removeFirst() {               // remove and return the item from the front
+    /**
+     * remove and return the item from the front
+     *
+     */
+    public Item removeFirst() {
         if (isEmpty()) throw new NoSuchElementException("Underflow");
         Item item = first.item;        // save item to return
         first = first.next;            // delete first node
@@ -72,10 +110,14 @@ public class Deque<Item> implements Iterable<Item> {
         return item;                   // return the saved item
     }
 
-    public Item removeLast() {                // remove and return the item from the end
+    /**
+     * remove and return the item from the end
+     *
+     */
+    public Item removeLast() {
         if (isEmpty()) throw new NoSuchElementException("Underflow");
         Item item = last.item;        // save item to return
-        last = last.previous;            // delete first node
+        last = last.previous;         // delete first node
         if (isEmpty()) {
             first = null;
         } else {
@@ -83,10 +125,13 @@ public class Deque<Item> implements Iterable<Item> {
         }
         N--;
         assert check();
-        return item;                   // return the saved item
+        return item;                  // return the saved item
     }
 
-    // return an iterator over items in order from front to end
+    /**
+     * return an iterator over items in order from front to end
+     *
+     */
     public Iterator<Item> iterator() { return new ListIterator(); }
 
     private class ListIterator implements Iterator<Item> {
@@ -102,8 +147,11 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
+    /**
+     * check if the operation is valid
+     *
+     */
     private boolean check() {
-        // check a few properties of instance variable 'first'
         if (N < 0) {
             return false;
         }
@@ -113,7 +161,7 @@ public class Deque<Item> implements Iterable<Item> {
         else if (N == 1) {
             if (first == null) return false;
             if (first.next != null || first.previous != null ||
-                last.next != null  || last.previous != null ) return false;
+                last.next != null  || last.previous != null) return false;
         }
         else {
             if (first == null || last == null) return false;
@@ -122,7 +170,11 @@ public class Deque<Item> implements Iterable<Item> {
         return true;
     }
 
-    public static void main(String[] args) {  // unit testing
+    /**
+     * unit testing
+     *
+     */
+    public static void main(String[] args) {
         Deque<String> d = new Deque<String>();
         System.out.println("Size: "+d.size()+"\nAdd 'abc'");
         d.addFirst("abc");

@@ -1,48 +1,90 @@
+/******************************************************************************
+ *  Compilation:  javac RandomizedQueue.java
+ *  Execution:    java RandomizedQueue
+ *  Dependencies: java.util.Iterator java.util.NoSuchElementException StdRandom
+ *
+ *   A randomized queue is similar to a stack or queue,
+ *   except that the item removed is chosen uniformly at random from items in the data structure.
+ *
+ ******************************************************************************/
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import edu.princeton.cs.algs4.StdRandom;
+
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] a;         // array of items
     private int N;            // number of elements
 
-    public RandomizedQueue() {                // construct an empty randomized queue
+    /**
+     * construct an empty randomized queue
+     *
+     */
+    public RandomizedQueue() {
         a = (Item[]) new Object[2];
         N = 0;
     }
 
-    public boolean isEmpty() {                // is the queue empty?
+    /**
+     * is the queue empty?
+     *
+     */
+    public boolean isEmpty() {
         return N == 0;
     }
 
-    public int size() {                       // return the number of items on the queue
+    /**
+     * return the number of items on the queue
+     *
+     */
+    public int size() {
         return N;
     }
 
-    public void enqueue(Item item) {          // add the item
+    /**
+     * add the item
+     *
+     * @param the Item needs to be added
+     *
+     */
+    public void enqueue(Item item) {
         if (item == null) throw new java.lang.NullPointerException();
         if (N == a.length) resize(2*a.length);
         a[N++] = item;
     }
 
-    public Item dequeue() {                   // remove and return a random item
+    /**
+     * remove and return a random item
+     *
+     */
+    public Item dequeue() {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
         StdRandom.shuffle(a, 0, N-1);
         Item item = a[N-1];
-        a[N-1] = null;                              // to avoid loitering
+        a[N-1] = null;                          // to avoid loitering
         N--;
         // shrink size of array if necessary
         if (N > 0 && N == a.length/4) resize(a.length/2);
         return item;
     }
 
-    public Item sample() {                    // return (but do not remove) a random item
+    /**
+     * return (but do not remove) a random item
+     *
+     */
+    public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
         StdRandom.shuffle(a, 0, N-1);
         return a[N-1];
     }
 
-    // resize the underlying array holding the elements
+    /**
+     * resize the underlying array holding the elements
+     *
+     * @param the size for new array
+     *
+     */
     private void resize(int capacity) {
         assert capacity >= N;
         Item[] temp = (Item[]) new Object[capacity];
@@ -52,7 +94,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         a = temp;
     }
 
-    public Iterator<Item> iterator() { return new ReverseArrayIterator(); }        // return an independent iterator over items in random order
+    /**
+     * return an independent iterator over items in random order
+     *
+     */
+    public Iterator<Item> iterator() { return new ReverseArrayIterator(); }
 
     private class ReverseArrayIterator implements Iterator<Item> {
         private int i;
@@ -76,7 +122,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
-    public static void main(String[] args) {  // unit testing
+    /**
+     * unit testing
+     *
+     */
+    public static void main(String[] args) {
         RandomizedQueue<String> r = new RandomizedQueue<String>();
         r.enqueue("test1");
         r.enqueue("test2");
@@ -88,7 +138,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (String s : r) {
             System.out.println(s);
         }
-
         for (String s : r) {
             System.out.println(s);
         }

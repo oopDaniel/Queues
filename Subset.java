@@ -1,3 +1,13 @@
+/******************************************************************************
+ *  Compilation:  javac Subset.java
+ *  Execution:    java Subset
+ *  Dependencies: StdIn
+ *
+ *   takes a command-line integer k;
+ *   reads in a sequence of N strings from standard input using StdIn.readString();
+ *   and prints out exactly k of them, uniformly at random.
+ *
+ ******************************************************************************/
 import edu.princeton.cs.algs4.StdIn;
 
 public class Subset {
