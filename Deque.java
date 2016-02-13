@@ -83,6 +83,26 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
+    private boolean check() {
+        // check a few properties of instance variable 'first'
+        if (N < 0) {
+            return false;
+        }
+        if (N == 0) {
+            if (first != null) return false;
+        }
+        else if (N == 1) {
+            if (first == null) return false;
+            if (first.next != null || first.previous != null ||
+                last.next != null  || last.previous != null ) return false;
+        }
+        else {
+            if (first == null || last == null) return false;
+            if (first.next == null || last.previous == null) return false;
+        }
+        return true;
+    }
+
     public static void main(String[] args) {  // unit testing
 
     }
