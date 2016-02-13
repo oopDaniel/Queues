@@ -14,16 +14,17 @@ import edu.princeton.cs.algs4.StdRandom;
 
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    private Item[] a;         // array of items
-    private int N;            // number of elements
+    private Item[] itemArray;    // array of items
+    private int size;            // number of elements
 
     /**
      * construct an empty randomized queue
      *
      */
+    // @SuppressWarnings("unchecked")
     public RandomizedQueue() {
-        a = (Item[]) new Object[2];
-        N = 0;
+        itemArray = (Item[]) new Object[2];
+        size = 0;
     }
 
     /**
@@ -31,7 +32,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      *
      */
     public boolean isEmpty() {
-        return N == 0;
+        return size == 0;
     }
 
     /**
@@ -39,7 +40,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      *
      */
     public int size() {
-        return N;
+        return size;
     }
 
     /**
@@ -50,8 +51,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      */
     public void enqueue(Item item) {
         if (item == null) throw new java.lang.NullPointerException();
-        if (N == a.length) resize(2*a.length);
-        a[N++] = item;
+        if (size == itemArray.length) resize(2 * itemArray.length);
+        itemArray[size++] = item;
     }
 
     /**
@@ -60,12 +61,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      */
     public Item dequeue() {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
-        StdRandom.shuffle(a, 0, N-1);
-        Item item = a[N-1];
-        a[N-1] = null;                          // to avoid loitering
-        N--;
+        int randomIndex = StdRandom.uniform(size);
+        Item item = itemArray[randomIndex];
+        itemArray[randomIndex] = itemArray[size - 1];
+        itemArray[size - 1] = null;                          // to avoid loitering
+        size--;
         // shrink size of array if necessary
-        if (N > 0 && N == a.length/4) resize(a.length/2);
+        if (size > 0 && size == itemArray.length / 4) resize(itemArray.length / 2);
         return item;
     }
 
@@ -75,8 +77,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      */
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("Queue underflow");
-        StdRandom.shuffle(a, 0, N-1);
-        return a[N-1];
+        return itemArray[ StdRandom.uniform(size) ];
     }
 
     /**
@@ -85,31 +86,37 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      * @param the size for new array
      *
      */
+    // @SuppressWarnings("unchecked")
     private void resize(int capacity) {
-        assert capacity >= N;
+        assert capacity >= size;
         Item[] temp = (Item[]) new Object[capacity];
-        for (int i = 0; i < N; i++) {
-            temp[i] = a[i];
+        for (int i = 0; i < size; i++) {
+            temp[i] = itemArray[i];
         }
-        a = temp;
+        itemArray = temp;
     }
 
     /**
      * return an independent iterator over items in random order
      *
      */
-    public Iterator<Item> iterator() { return new ReverseArrayIterator(); }
+    public Iterator<Item> iterator() { return new ArrayIterator(); }
 
-    private class ReverseArrayIterator implements Iterator<Item> {
-        private int i;
+    private class ArrayIterator implements Iterator<Item> {
+        private int index;
+        private Item[] iterArr;
 
-        public ReverseArrayIterator() {
-            i = N-1;
-            StdRandom.shuffle(a, 0, i);
+        public ArrayIterator() {
+            index = 0;
+            iterArr = (Item[]) new Object[size];
+            for (int i = 0; i < size; i++) {
+                iterArr[i] = itemArray[i];
+            }
+            StdRandom.shuffle(iterArr);
         }
 
         public boolean hasNext() {
-            return i >= 0;
+            return index < size;
         }
 
         public void remove() {
@@ -118,12 +125,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            return a[i--];
+            return iterArr[index++];
         }
     }
 
     /**
-     * unit testing
+     * testing
      *
      */
     public static void main(String[] args) {

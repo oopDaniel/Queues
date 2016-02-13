@@ -171,7 +171,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * unit testing
+     * testing
      *
      */
     public static void main(String[] args) {
