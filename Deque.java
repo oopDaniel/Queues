@@ -1,22 +1,25 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import edu.princeton.cs.algs4.StdOut;
+
 public class Deque<Item> implements Iterable<Item> {
     private Node first, last;
     private int N;
 
     private class Node {
-        Item item;
-        Node next, previous;
+        private Item item;
+        private Node next, previous;
     }
 
     public Deque() {                          // construct an empty deque
         first = null;
         last = null;
-        hasData = false;
         N = 0;
         assert check();
     }
 
     public boolean isEmpty() {                // is the deque empty?
-        return first == null && last == null;
+        return first == null || last == null;
     }
 
     public int size() {                       // return the number of items on the deque
@@ -24,44 +27,60 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public void addFirst(Item item) {         // add the item to the front
+        if (item == null) throw new java.lang.NullPointerException();
         Node oldfirst = first;
+        first = new Node();
         first.item = item;
         first.next = oldfirst;
         first.previous = null;
-        if (first.next == first.previous) {
+        if (isEmpty()) {
             last = first;
+        } else {
+            oldfirst.previous = first;
         }
         N++;
         assert check();
     }
 
     public void addLast(Item item) {          // add the item to the end
+        if (item == null) throw new java.lang.NullPointerException();
         Node oldlast = last;
+        last = new Node();
         last.item = item;
         last.next = null;
         last.previous = oldlast;
-        if (last.next == last.previous) {
+        if (isEmpty()) {
             first = last;
+        } else {
+            oldlast.next = last;
         }
         N++;
         assert check();
     }
 
     public Item removeFirst() {               // remove and return the item from the front
-        if (isEmpty()) throw new NoSuchElementException("Stack underflow");
+        if (isEmpty()) throw new NoSuchElementException("Underflow");
         Item item = first.item;        // save item to return
         first = first.next;            // delete first node
-        first.previous = null;
+        if (isEmpty()) {
+            last = null;
+        } else {
+            first.previous = null;
+        }
         N--;
         assert check();
         return item;                   // return the saved item
     }
 
     public Item removeLast() {                // remove and return the item from the end
-        if (isEmpty()) throw new NoSuchElementException("Queue underflow");
+        if (isEmpty()) throw new NoSuchElementException("Underflow");
         Item item = last.item;        // save item to return
         last = last.previous;            // delete first node
-        last.next = null;
+        if (isEmpty()) {
+            first = null;
+        } else {
+            last.next = null;
+        }
         N--;
         assert check();
         return item;                   // return the saved item
@@ -104,6 +123,21 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public static void main(String[] args) {  // unit testing
+        Deque<String> d = new Deque<String>();
+        System.out.println("Size: "+d.size()+"\nAdd 'abc'");
+        d.addFirst("abc");
+        System.out.println("dequeue: "+d.removeLast());
+        d.addFirst("a1");
+        d.addLast("c3");
+        d.addFirst("b2");
+        d.addLast("Last!!");
 
+        // System.out.println("pop: "+d.removeFirst());
+        // System.out.println("pop: "+d.removeLast());
+        // System.out.println("pop: "+d.removeFirst());
+        // System.out.println("pop: "+d.removeFirst());
+        for (String s : d) {
+            System.out.print(s);
+        }
     }
 }
