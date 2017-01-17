@@ -61,12 +61,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (size == 0) throw new java.util.NoSuchElementException();
         
         int index = StdRandom.uniform(size);
-        int end   = size - 1;
-        swap(queue, index, end);
 
-        Item item  = queue[end];
-        queue[end] = null;
-        --size;
+        Item item    = queue[index];
+        queue[index] = queue[--size];
+        queue[size]   = null;
 
         if (size > 0 && size == queue.length / 4) resize(queue.length / 2);
 
@@ -86,12 +84,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         for (int i = 0; i < size; ++i) copy[i] = queue[i];
         queue = copy;
-    }
-
-    private void swap(Item[] arr, int a, int b) {
-        Item tmp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = tmp;
     }
 
     public static void main(String[] args) { }

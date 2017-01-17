@@ -3,11 +3,11 @@
 *  Written:       1/17/2017
 *  Last updated:  1/17/2017
 *
-*  Compilation:   javac -cp $CLASSPATH Deque.java
-*  Execution:     java Deque
+*  Compilation:   javac -cp $CLASSPATH Permutation.java
+*  Execution:     java Permutation <lines> <fileName>
 *  
 *
-*  Basic data structure implementation: Deque (Double-ended queue)
+*  Read lines in file in order to test RandomizedQueue
 *
 *----------------------------------------------------------------*/
 
@@ -19,25 +19,12 @@ public class Permutation {
         int max = Integer.parseInt(args[0]);
         RandomizedQueue<String> rq = new RandomizedQueue<String>();
 
-        // int count = 0;
-        while (!StdIn.isEmpty()) {
-            // ++count;
-            // String data = StdIn.readString();
-            // if (count < max) rq.enqueue(data);
+        while (!StdIn.isEmpty())
             rq.enqueue(StdIn.readString());
-        }
-
-        // int i = 0;
-        // for (String s : rq) {
-        //     System.out.println(s);
-        //     ++i;
-        //     if (i >= n) break;
-        // }
 
         Iterator<String> iterator = rq.iterator();
         for (int i = 0; i < max && iterator.hasNext(); i++) {
             System.out.println(iterator.next());
         }
-
     }
 }
